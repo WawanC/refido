@@ -6,6 +6,9 @@ export const handleFirebaseError = (code: string): string | null => {
     case "auth/weak-password":
       return "Password minimal 6 characters long";
 
+    case "auth/username-already-in-use":
+      return "Username already used";
+
     default:
       return null;
   }

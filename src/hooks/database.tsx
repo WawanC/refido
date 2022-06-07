@@ -1,10 +1,9 @@
-import { ref, set } from "firebase/database";
+import { equalTo, get, orderByChild, query, ref, set } from "firebase/database";
 import { useState } from "react";
 import { database } from "../utils/firebase";
 
 export const useCreateUserData = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [error, setError] = useState<any>(null);
 
   const createUserData = async (userData: {
     uid: string;
@@ -12,7 +11,6 @@ export const useCreateUserData = () => {
     username: string;
   }) => {
     setIsLoading(true);
-    setError(null);
 
     const usersRef = ref(database, `users/${userData.uid}`);
 
@@ -22,11 +20,30 @@ export const useCreateUserData = () => {
         username: userData.username,
       });
     } catch (error) {
-      setError(error);
+      throw error;
     }
 
     setIsLoading(false);
   };
 
-  return [createUserData, isLoading, error] as const;
+  return [createUserData, isLoading] as const;
+};
+
+export const useGetUserByUsername = () => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const getUser = async (username: string) => {
+    try {
+      const userQuery = query(
+        ref(database, "users"),
+        orderByChild("username"),
+        equalTo(username)
+      );
+      return await get(userQuery);
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  return [getUser, isLoading] as const;
 };

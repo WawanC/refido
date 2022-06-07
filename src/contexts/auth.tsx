@@ -48,6 +48,8 @@ const AuthProvider: React.FC<{ children: ReactNode }> = (props) => {
     }
   };
 
+  const deleteUser = async (uid: string) => {};
+
   const value: IAuthContext = {
     currentUser,
     registerUser,
