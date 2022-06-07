@@ -1,4 +1,5 @@
 import React, { useReducer, useState } from "react";
+import { useAuth } from "../../contexts/auth";
 import classes from "./register-page.module.css";
 
 interface IRegisterFormState {
@@ -56,8 +57,9 @@ const RegisterPage: React.FC = () => {
     React.Reducer<IRegisterFormState, IRegisterFormAction>
   >(formReducer, registerFormInitialState);
   const [error, setError] = useState<string | null>(null);
+  const { registerUser } = useAuth();
 
-  const submitFormHandler: React.FormEventHandler<HTMLFormElement> = (
+  const submitFormHandler: React.FormEventHandler<HTMLFormElement> = async (
     event
   ) => {
     event.preventDefault();
@@ -90,6 +92,15 @@ const RegisterPage: React.FC = () => {
     }
 
     console.log(formState);
+
+    try {
+      await registerUser(
+        formState.enteredEmail.trim(),
+        formState.enteredPassword.trim()
+      );
+    } catch (error) {
+      console.log(error);
+    }
 
     formDispatch({ type: RegisterFormAction.CLEAR_ALL });
   };
