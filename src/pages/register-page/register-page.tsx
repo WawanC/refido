@@ -1,5 +1,6 @@
 import React, { useReducer, useState } from "react";
 import { useAuth } from "../../contexts/auth";
+import { handleFirebaseError } from "../../utils/firebase-error";
 import classes from "./register-page.module.css";
 
 interface IRegisterFormState {
@@ -98,8 +99,10 @@ const RegisterPage: React.FC = () => {
         formState.enteredEmail.trim(),
         formState.enteredPassword.trim()
       );
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      const message = handleFirebaseError(error.code);
+      setError(message);
+      return formDispatch({ type: RegisterFormAction.CLEAR_PASSWORDS });
     }
 
     formDispatch({ type: RegisterFormAction.CLEAR_ALL });
