@@ -1,5 +1,6 @@
 import React, { useReducer, useState } from "react";
 import { useAuth } from "../../contexts/auth";
+import { useCreateUserData } from "../../hooks/database";
 import { handleFirebaseError } from "../../utils/firebase-error";
 import classes from "./register-page.module.css";
 
@@ -59,6 +60,8 @@ const RegisterPage: React.FC = () => {
   >(formReducer, registerFormInitialState);
   const [error, setError] = useState<string | null>(null);
   const { registerUser } = useAuth();
+  const [createUserData, createUserDataLoading, createUserDataError] =
+    useCreateUserData();
 
   const submitFormHandler: React.FormEventHandler<HTMLFormElement> = async (
     event
@@ -95,10 +98,17 @@ const RegisterPage: React.FC = () => {
     console.log(formState);
 
     try {
-      await registerUser(
+      const userData = await registerUser(
         formState.enteredEmail.trim(),
         formState.enteredPassword.trim()
       );
+
+      await createUserData({
+        uid: userData.user.uid,
+        email: formState.enteredEmail.trim(),
+        username: formState.enteredUsername.trim(),
+      });
+      
     } catch (error: any) {
       const message = handleFirebaseError(error.code);
       setError(message);

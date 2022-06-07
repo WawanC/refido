@@ -9,21 +9,24 @@ import {
   User,
   onAuthStateChanged,
   createUserWithEmailAndPassword,
+  UserCredential,
 } from "firebase/auth";
 import { auth } from "../utils/firebase";
 
 interface IAuthContext {
   currentUser: User | null;
-  registerUser: (email: string, password: string) => Promise<void>;
+  registerUser: (email: string, password: string) => Promise<UserCredential>;
 }
 
-const AuthContext = createContext<IAuthContext>({
-  currentUser: null,
-  registerUser: () => Promise.resolve(),
-});
+const AuthContext = createContext<IAuthContext | undefined>(undefined);
 
 export const useAuth = () => {
-  return useContext(AuthContext);
+  const context = useContext(AuthContext);
+
+  if (context === undefined) {
+    throw new Error("Auth Context not defined");
+  }
+  return context;
 };
 
 const AuthProvider: React.FC<{ children: ReactNode }> = (props) => {
@@ -38,7 +41,8 @@ const AuthProvider: React.FC<{ children: ReactNode }> = (props) => {
 
   const registerUser = async (email: string, password: string) => {
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
+      const user = await createUserWithEmailAndPassword(auth, email, password);
+      return user;
     } catch (error) {
       throw error;
     }
