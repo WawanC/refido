@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import HomePage from "./pages/home-page";
-import RegisterPage from "./pages/register-page";
+import HomePage from "./pages/home-page/home-page";
+import RegisterPage from "./pages/register-page/register-page";
 
 const App: React.FC = () => {
   return (
