@@ -1,4 +1,4 @@
-import React, { useReducer } from "react";
+import React, { useReducer, useState } from "react";
 import classes from "./register-page.module.css";
 
 interface IRegisterFormState {
@@ -18,6 +18,7 @@ enum RegisterFormAction {
   CHANGE_USERNAME,
   CHANGE_PASSWORD,
   CHANGE_PASSWORD2,
+  CLEAR_PASSWORDS,
   CLEAR_ALL,
 }
 
@@ -27,13 +28,15 @@ const formReducer: React.Reducer<IRegisterFormState, IRegisterFormAction> = (
 ) => {
   switch (action.type) {
     case RegisterFormAction.CHANGE_EMAIL:
-      return { ...state, enteredEmail: action.payload || "" };
+      return { ...state, enteredEmail: action.payload?.trim() || "" };
     case RegisterFormAction.CHANGE_USERNAME:
-      return { ...state, enteredUsername: action.payload || "" };
+      return { ...state, enteredUsername: action.payload?.trim() || "" };
     case RegisterFormAction.CHANGE_PASSWORD:
-      return { ...state, enteredPassword: action.payload || "" };
+      return { ...state, enteredPassword: action.payload?.trim() || "" };
     case RegisterFormAction.CHANGE_PASSWORD2:
-      return { ...state, enteredPassword2: action.payload || "" };
+      return { ...state, enteredPassword2: action.payload?.trim() || "" };
+    case RegisterFormAction.CLEAR_PASSWORDS:
+      return { ...state, enteredPassword: "", enteredPassword2: "" };
     case RegisterFormAction.CLEAR_ALL:
       return registerFormInitialState;
     default:
@@ -52,11 +55,39 @@ const RegisterPage: React.FC = () => {
   const [formState, formDispatch] = useReducer<
     React.Reducer<IRegisterFormState, IRegisterFormAction>
   >(formReducer, registerFormInitialState);
+  const [error, setError] = useState<string | null>(null);
 
   const submitFormHandler: React.FormEventHandler<HTMLFormElement> = (
     event
   ) => {
     event.preventDefault();
+    setError(null);
+
+    if (formState.enteredUsername.length < 6) {
+      setError("Username minimal 6 characters long");
+      formDispatch({ type: RegisterFormAction.CHANGE_USERNAME });
+      formDispatch({ type: RegisterFormAction.CLEAR_PASSWORDS });
+      return;
+    }
+
+    if (formState.enteredUsername.length < 6) {
+      setError("Username minimal 6 characters long");
+      formDispatch({ type: RegisterFormAction.CHANGE_USERNAME });
+      formDispatch({ type: RegisterFormAction.CLEAR_PASSWORDS });
+      return;
+    }
+
+    if (formState.enteredPassword.length < 6) {
+      setError("Passwords minimal 6 characters long");
+      formDispatch({ type: RegisterFormAction.CLEAR_PASSWORDS });
+      return;
+    }
+
+    if (formState.enteredPassword !== formState.enteredPassword2) {
+      setError("Passwords not equal");
+      formDispatch({ type: RegisterFormAction.CLEAR_PASSWORDS });
+      return;
+    }
 
     console.log(formState);
 
@@ -67,6 +98,7 @@ const RegisterPage: React.FC = () => {
     <main className={classes.main}>
       <form className={classes.form} onSubmit={submitFormHandler}>
         <h1 className={classes.formTitle}>Create Account</h1>
+        {error && <span className={classes.formError}>{error}</span>}
         <div className={classes.inputBox}>
           <label htmlFor="email">E-Mail</label>
           <input
