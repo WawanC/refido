@@ -2,6 +2,7 @@ import React, { useReducer, useState } from "react";
 import { useRegisterUser } from "../../hooks/user";
 import { handleAuthError } from "../../utils/errorHandler";
 import classes from "./register-page.module.css";
+import { MoonLoader } from "react-spinners";
 
 interface IRegisterFormState {
   enteredEmail: string;
@@ -120,93 +121,108 @@ const RegisterPage: React.FC = () => {
       return formDispatch({ type: RegisterFormAction.CLEAR_PASSWORDS });
     }
 
+    alert("Register User Success");
+
     formDispatch({ type: RegisterFormAction.CLEAR_ALL });
   };
 
   return (
     <main className={classes.main}>
-      <form className={classes.form} onSubmit={submitFormHandler}>
-        <h1 className={classes.formTitle}>Create Account</h1>
-        {error && <span className={classes.formError}>{error.message}</span>}
-        <div
-          className={`${classes.inputBox} ${
-            error?.field === "email" && classes.inputError
-          }`}
-        >
-          <label htmlFor="email">E-Mail</label>
-          <input
-            type="email"
-            id="email"
-            value={formState.enteredEmail}
-            onChange={(ev) =>
-              formDispatch({
-                type: RegisterFormAction.CHANGE_EMAIL,
-                payload: ev.target.value,
-              })
-            }
-            required
-          />
-        </div>
-        <div
-          className={`${classes.inputBox} ${
-            error?.field === "username" && classes.inputError
-          }`}
-        >
-          <label htmlFor="username">Username</label>
-          <input
-            type="text"
-            id="username"
-            value={formState.enteredUsername}
-            onChange={(ev) =>
-              formDispatch({
-                type: RegisterFormAction.CHANGE_USERNAME,
-                payload: ev.target.value,
-              })
-            }
-            required
-          />
-        </div>
-        <div
-          className={`${classes.inputBox} ${
-            error?.field === "password" && classes.inputError
-          }`}
-        >
-          <label htmlFor="password">Password</label>
-          <input
-            type="password"
-            id="password"
-            value={formState.enteredPassword}
-            onChange={(ev) =>
-              formDispatch({
-                type: RegisterFormAction.CHANGE_PASSWORD,
-                payload: ev.target.value,
-              })
-            }
-            required
-          />
-        </div>
-        <div
-          className={`${classes.inputBox} ${
-            error?.field === "password2" && classes.inputError
-          }`}
-        >
-          <label htmlFor="password2">Repeat Password</label>
-          <input
-            type="password"
-            id="password2"
-            value={formState.enteredPassword2}
-            onChange={(ev) =>
-              formDispatch({
-                type: RegisterFormAction.CHANGE_PASSWORD2,
-                payload: ev.target.value,
-              })
-            }
-            required
-          />
-        </div>
-        <div className={classes.actionBox}>
-          <button type="submit">Register</button>
-        </div>
+      <form
+        className={`${classes.form} ${
+          registerUserLoading && classes.formLoading
+        }`}
+        onSubmit={submitFormHandler}
+      >
+        {registerUserLoading ? (
+          <MoonLoader color="black" size={60} />
+        ) : (
+          <>
+            <h1 className={classes.formTitle}>Create Account</h1>
+            {error && (
+              <span className={classes.formError}>{error.message}</span>
+            )}
+            <div
+              className={`${classes.inputBox} ${
+                error?.field === "email" && classes.inputError
+              }`}
+            >
+              <label htmlFor="email">E-Mail</label>
+              <input
+                type="email"
+                id="email"
+                value={formState.enteredEmail}
+                onChange={(ev) =>
+                  formDispatch({
+                    type: RegisterFormAction.CHANGE_EMAIL,
+                    payload: ev.target.value,
+                  })
+                }
+                required
+              />
+            </div>
+            <div
+              className={`${classes.inputBox} ${
+                error?.field === "username" && classes.inputError
+              }`}
+            >
+              <label htmlFor="username">Username</label>
+              <input
+                type="text"
+                id="username"
+                value={formState.enteredUsername}
+                onChange={(ev) =>
+                  formDispatch({
+                    type: RegisterFormAction.CHANGE_USERNAME,
+                    payload: ev.target.value,
+                  })
+                }
+                required
+              />
+            </div>
+            <div
+              className={`${classes.inputBox} ${
+                error?.field === "password" && classes.inputError
+              }`}
+            >
+              <label htmlFor="password">Password</label>
+              <input
+                type="password"
+                id="password"
+                value={formState.enteredPassword}
+                onChange={(ev) =>
+                  formDispatch({
+                    type: RegisterFormAction.CHANGE_PASSWORD,
+                    payload: ev.target.value,
+                  })
+                }
+                required
+              />
+            </div>
+            <div
+              className={`${classes.inputBox} ${
+                error?.field === "password2" && classes.inputError
+              }`}
+            >
+              <label htmlFor="password2">Repeat Password</label>
+              <input
+                type="password"
+                id="password2"
+                value={formState.enteredPassword2}
+                onChange={(ev) =>
+                  formDispatch({
+                    type: RegisterFormAction.CHANGE_PASSWORD2,
+                    payload: ev.target.value,
+                  })
+                }
+                required
+              />
+            </div>
+            <div className={classes.actionBox}>
+              <button type="submit">Register</button>
+            </div>
+          </>
+        )}
       </form>
     </main>
   );
