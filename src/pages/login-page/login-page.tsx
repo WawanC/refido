@@ -47,7 +47,7 @@ const LoginPage: React.FC = () => {
   const [formState, formDispatch] = useReducer<
     React.Reducer<ILoginFormState, ILoginFormAction>
   >(formReducer, loginFormInitialState);
-  const [loginUser, loginUserLoading] = useLoginUser();
+  const [loginUser] = useLoginUser();
   const [error, setError] = useState<{ message: string; field: string } | null>(
     null
   );
