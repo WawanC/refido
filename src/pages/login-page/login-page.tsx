@@ -4,13 +4,13 @@ import { handleAuthError } from "../../utils/errorHandler";
 import classes from "./login-page.module.css";
 
 enum LoginFormAction {
-  CHANGE_EMAIL,
+  CHANGE_EMAIL_USERNAME,
   CHANGE_PASSWORD,
   CLEAR_ALL,
 }
 
 interface ILoginFormState {
-  enteredEmail: string;
+  enteredEmailOrUsername: string;
   enteredPassword: string;
 }
 
@@ -20,7 +20,7 @@ interface ILoginFormAction {
 }
 
 const loginFormInitialState: ILoginFormState = {
-  enteredEmail: "",
+  enteredEmailOrUsername: "",
   enteredPassword: "",
 };
 
@@ -29,8 +29,8 @@ const formReducer: React.Reducer<ILoginFormState, ILoginFormAction> = (
   action
 ) => {
   switch (action.type) {
-    case LoginFormAction.CHANGE_EMAIL:
-      return { ...state, enteredEmail: action.payload?.trim() || "" };
+    case LoginFormAction.CHANGE_EMAIL_USERNAME:
+      return { ...state, enteredEmailOrUsername: action.payload?.trim() || "" };
 
     case LoginFormAction.CHANGE_PASSWORD:
       return { ...state, enteredPassword: action.payload?.trim() || "" };
@@ -62,7 +62,7 @@ const LoginPage: React.FC = () => {
 
     try {
       await loginUser({
-        email: formState.enteredEmail.trim(),
+        emailOrUsername: formState.enteredEmailOrUsername.trim(),
         password: formState.enteredPassword.trim(),
       });
     } catch (error: any) {
@@ -84,14 +84,14 @@ const LoginPage: React.FC = () => {
         <h1 className={classes.formTitle}>Sign-In</h1>
         {error && <span className={classes.formError}>{error.message}</span>}
         <div className={classes.inputBox}>
-          <label htmlFor="email">E-Mail</label>
+          <label htmlFor="emailOrUsername">E-Mail / Username</label>
           <input
-            type="email"
-            id="email"
-            value={formState.enteredEmail}
+            type="text"
+            id="emailOrUsername"
+            value={formState.enteredEmailOrUsername}
             onChange={(ev) =>
               formDispatch({
-                type: LoginFormAction.CHANGE_EMAIL,
+                type: LoginFormAction.CHANGE_EMAIL_USERNAME,
                 payload: ev.target.value,
               })
             }

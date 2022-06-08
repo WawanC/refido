@@ -55,11 +55,38 @@ export const useRegisterUser = () => {
 export const useLoginUser = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const loginUser = async (userData: { email: string; password: string }) => {
+  const loginUser = async (userData: {
+    emailOrUsername: string;
+    password: string;
+  }) => {
     setIsLoading(true);
+    let userEmail = userData.emailOrUsername;
 
     try {
-      await signInWithEmailAndPassword(auth, userData.email, userData.password);
+      const isEmail = String(userEmail)
+        .toLowerCase()
+        .match(
+          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        );
+
+      if (!isEmail) {
+        const usersRef = ref(database, "users");
+        const getUserQuery = query(
+          usersRef,
+          orderByChild("username"),
+          equalTo(userData.emailOrUsername)
+        );
+
+        const user = await get(getUserQuery);
+
+        if (!user.exists()) {
+          throw new Error("auth/user-not-found");
+        }
+
+        userEmail = user.val()[Object.keys(user.val())[0]].email;
+      }
+
+      await signInWithEmailAndPassword(auth, userEmail, userData.password);
     } catch (error: any) {
       throw error;
     }
