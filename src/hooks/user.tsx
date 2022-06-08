@@ -61,7 +61,6 @@ export const useLoginUser = () => {
     try {
       await signInWithEmailAndPassword(auth, userData.email, userData.password);
     } catch (error: any) {
-      console.log(error.code);
       throw error;
     }
   };

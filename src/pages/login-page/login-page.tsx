@@ -1,5 +1,6 @@
-import React, { useReducer } from "react";
+import React, { useReducer, useState } from "react";
 import { useLoginUser } from "../../hooks/user";
+import { handleAuthError } from "../../utils/errorHandler";
 import classes from "./login-page.module.css";
 
 enum LoginFormAction {
@@ -47,11 +48,15 @@ const LoginPage: React.FC = () => {
     React.Reducer<ILoginFormState, ILoginFormAction>
   >(formReducer, loginFormInitialState);
   const [loginUser, loginUserLoading] = useLoginUser();
+  const [error, setError] = useState<{ message: string; field: string } | null>(
+    null
+  );
 
   const submitFormHandler: React.FormEventHandler<HTMLFormElement> = async (
     event
   ) => {
     event.preventDefault();
+    setError(null);
 
     console.log(formState);
 
@@ -61,7 +66,10 @@ const LoginPage: React.FC = () => {
         password: formState.enteredPassword.trim(),
       });
     } catch (error: any) {
-      console.log(error.code);
+      const err = handleAuthError(error.code || error.message);
+      if (!err) return;
+      setError({ message: err.message, field: err.field });
+      formDispatch({ type: LoginFormAction.CLEAR_ALL });
       return;
     }
 
@@ -74,6 +82,7 @@ const LoginPage: React.FC = () => {
     <main className={classes.main}>
       <form className={classes.form} onSubmit={submitFormHandler}>
         <h1 className={classes.formTitle}>Sign-In</h1>
+        {error && <span className={classes.formError}>{error.message}</span>}
         <div className={classes.inputBox}>
           <label htmlFor="email">E-Mail</label>
           <input

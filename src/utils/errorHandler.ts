@@ -14,6 +14,12 @@ export const handleAuthError = (
     case "auth/username-already-in-use":
       return { message: "Username already used", field: "username" };
 
+    case "auth/user-not-found":
+      return { message: "Wrong Info", field: "email" };
+
+    case "auth/wrong-password":
+      return { message: "Wrong Info", field: "password" };
+
     default:
       return null;
   }
