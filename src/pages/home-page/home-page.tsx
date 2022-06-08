@@ -7,6 +7,7 @@ const HomePage: React.FC = () => {
       <section className={classes.mainBox}>
         <h1 className={classes.title}>Refido Home Page</h1>
         <div className={classes.linkBox}>
+          <Link to="/login">Login</Link>
           <Link to="/register">Register</Link>
         </div>
       </section>
