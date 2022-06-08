@@ -1,4 +1,7 @@
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 import { equalTo, get, orderByChild, query, ref, set } from "firebase/database";
 import { useState } from "react";
 import { auth, database } from "../utils/firebase";
@@ -47,4 +50,21 @@ export const useRegisterUser = () => {
   };
 
   return [registerUser, isLoading] as const;
+};
+
+export const useLoginUser = () => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const loginUser = async (userData: { email: string; password: string }) => {
+    setIsLoading(true);
+
+    try {
+      await signInWithEmailAndPassword(auth, userData.email, userData.password);
+    } catch (error: any) {
+      console.log(error.code);
+      throw error;
+    }
+  };
+
+  return [loginUser, isLoading] as const;
 };

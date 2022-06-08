@@ -1,4 +1,5 @@
 import React, { useReducer } from "react";
+import { useLoginUser } from "../../hooks/user";
 import classes from "./login-page.module.css";
 
 enum LoginFormAction {
@@ -45,6 +46,7 @@ const LoginPage: React.FC = () => {
   const [formState, formDispatch] = useReducer<
     React.Reducer<ILoginFormState, ILoginFormAction>
   >(formReducer, loginFormInitialState);
+  const [loginUser, loginUserLoading] = useLoginUser();
 
   const submitFormHandler: React.FormEventHandler<HTMLFormElement> = async (
     event
@@ -52,6 +54,18 @@ const LoginPage: React.FC = () => {
     event.preventDefault();
 
     console.log(formState);
+
+    try {
+      await loginUser({
+        email: formState.enteredEmail.trim(),
+        password: formState.enteredPassword.trim(),
+      });
+    } catch (error: any) {
+      console.log(error.code);
+      return;
+    }
+
+    alert("Login Success");
 
     formDispatch({ type: LoginFormAction.CLEAR_ALL });
   };
