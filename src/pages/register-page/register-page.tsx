@@ -1,6 +1,6 @@
 import React, { useReducer, useState } from "react";
 import { useRegisterUser } from "../../hooks/user";
-import { handleFirebaseError } from "../../utils/firebase-error";
+import { handleAuthError } from "../../utils/errorHandler";
 import classes from "./register-page.module.css";
 
 interface IRegisterFormState {
@@ -57,7 +57,9 @@ const RegisterPage: React.FC = () => {
   const [formState, formDispatch] = useReducer<
     React.Reducer<IRegisterFormState, IRegisterFormAction>
   >(formReducer, registerFormInitialState);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<{ message: string; field: string } | null>(
+    null
+  );
   const [registerUser, registerUserLoading] = useRegisterUser();
 
   const submitFormHandler: React.FormEventHandler<HTMLFormElement> = async (
@@ -67,27 +69,36 @@ const RegisterPage: React.FC = () => {
     setError(null);
 
     if (formState.enteredUsername.length < 6) {
-      setError("Username minimal 6 characters long");
+      setError({
+        message: "Username minimal 6 characters long",
+        field: "password",
+      });
       formDispatch({ type: RegisterFormAction.CHANGE_USERNAME });
       formDispatch({ type: RegisterFormAction.CLEAR_PASSWORDS });
       return;
     }
 
     if (formState.enteredUsername.length < 6) {
-      setError("Username minimal 6 characters long");
+      setError({
+        message: "Username minimal 6 characters long",
+        field: "username",
+      });
       formDispatch({ type: RegisterFormAction.CHANGE_USERNAME });
       formDispatch({ type: RegisterFormAction.CLEAR_PASSWORDS });
       return;
     }
 
     if (formState.enteredPassword.length < 6) {
-      setError("Passwords minimal 6 characters long");
+      setError({
+        message: "Passwords minimal 6 characters long",
+        field: "password",
+      });
       formDispatch({ type: RegisterFormAction.CLEAR_PASSWORDS });
       return;
     }
 
     if (formState.enteredPassword !== formState.enteredPassword2) {
-      setError("Passwords not equal");
+      setError({ message: "Passwords not equal", field: "password2" });
       formDispatch({ type: RegisterFormAction.CLEAR_PASSWORDS });
       return;
     }
@@ -101,8 +112,11 @@ const RegisterPage: React.FC = () => {
         password: formState.enteredPassword.trim(),
       });
     } catch (error: any) {
-      const message = handleFirebaseError(error.code || error.message);
-      setError(message);
+      const err = handleAuthError(error.code || error.message);
+      if (!err) return;
+
+      setError({ message: err.message, field: err.field });
+
       return formDispatch({ type: RegisterFormAction.CLEAR_PASSWORDS });
     }
 
@@ -113,8 +127,12 @@ const RegisterPage: React.FC = () => {
     <main className={classes.main}>
       <form className={classes.form} onSubmit={submitFormHandler}>
         <h1 className={classes.formTitle}>Create Account</h1>
-        {error && <span className={classes.formError}>{error}</span>}
-        <div className={classes.inputBox}>
+        {error && <span className={classes.formError}>{error.message}</span>}
+        <div
+          className={`${classes.inputBox} ${
+            error?.field === "email" && classes.inputError
+          }`}
+        >
           <label htmlFor="email">E-Mail</label>
           <input
             type="email"
@@ -129,7 +147,11 @@ const RegisterPage: React.FC = () => {
             required
           />
         </div>
-        <div className={classes.inputBox}>
+        <div
+          className={`${classes.inputBox} ${
+            error?.field === "username" && classes.inputError
+          }`}
+        >
           <label htmlFor="username">Username</label>
           <input
             type="text"
@@ -144,7 +166,11 @@ const RegisterPage: React.FC = () => {
             required
           />
         </div>
-        <div className={classes.inputBox}>
+        <div
+          className={`${classes.inputBox} ${
+            error?.field === "password" && classes.inputError
+          }`}
+        >
           <label htmlFor="password">Password</label>
           <input
             type="password"
@@ -159,7 +185,11 @@ const RegisterPage: React.FC = () => {
             required
           />
         </div>
-        <div className={classes.inputBox}>
+        <div
+          className={`${classes.inputBox} ${
+            error?.field === "password2" && classes.inputError
+          }`}
+        >
           <label htmlFor="password2">Repeat Password</label>
           <input
             type="password"

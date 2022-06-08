@@ -38,6 +38,11 @@
   padding: 0.5rem;
 }
 
+.inputError input {
+  border: 1px solid red;
+  outline-color: red;
+}
+
 .actionBox {
   display: flex;
   justify-content: center;
