@@ -8,14 +8,11 @@ import React, {
 import {
   User,
   onAuthStateChanged,
-  createUserWithEmailAndPassword,
-  UserCredential,
 } from "firebase/auth";
 import { auth } from "../utils/firebase";
 
 interface IAuthContext {
   currentUser: User | null;
-  registerUser: (email: string, password: string) => Promise<UserCredential>;
 }
 
 const AuthContext = createContext<IAuthContext | undefined>(undefined);
@@ -39,20 +36,8 @@ const AuthProvider: React.FC<{ children: ReactNode }> = (props) => {
     return unsubscribe;
   }, []);
 
-  const registerUser = async (email: string, password: string) => {
-    try {
-      const user = await createUserWithEmailAndPassword(auth, email, password);
-      return user;
-    } catch (error) {
-      throw error;
-    }
-  };
-
-  const deleteUser = async (uid: string) => {};
-
   const value: IAuthContext = {
     currentUser,
-    registerUser,
   };
 
   return (

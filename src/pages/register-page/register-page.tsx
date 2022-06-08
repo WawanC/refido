@@ -1,6 +1,5 @@
 import React, { useReducer, useState } from "react";
-import { useAuth } from "../../contexts/auth";
-import { useCreateUserData, useGetUserByUsername } from "../../hooks/database";
+import { useRegisterUser } from "../../hooks/user";
 import { handleFirebaseError } from "../../utils/firebase-error";
 import classes from "./register-page.module.css";
 
@@ -59,9 +58,7 @@ const RegisterPage: React.FC = () => {
     React.Reducer<IRegisterFormState, IRegisterFormAction>
   >(formReducer, registerFormInitialState);
   const [error, setError] = useState<string | null>(null);
-  const { registerUser } = useAuth();
-  const [createUserData, createUserDataLoading] = useCreateUserData();
-  const [getUserByUsername, getUserByUsernameLoading] = useGetUserByUsername();
+  const [registerUser, registerUserLoading] = useRegisterUser();
 
   const submitFormHandler: React.FormEventHandler<HTMLFormElement> = async (
     event
@@ -98,21 +95,10 @@ const RegisterPage: React.FC = () => {
     console.log(formState);
 
     try {
-      const user = await getUserByUsername(formState.enteredUsername.trim());
-
-      if (user.exists()) {
-        throw new Error("auth/username-already-in-use");
-      }
-
-      const userData = await registerUser(
-        formState.enteredEmail.trim(),
-        formState.enteredPassword.trim()
-      );
-
-      await createUserData({
-        uid: userData.user.uid,
+      await registerUser({
         email: formState.enteredEmail.trim(),
         username: formState.enteredUsername.trim(),
+        password: formState.enteredPassword.trim(),
       });
     } catch (error: any) {
       const message = handleFirebaseError(error.code || error.message);
