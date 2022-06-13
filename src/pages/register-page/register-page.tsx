@@ -3,6 +3,7 @@ import { useRegisterUser } from "../../hooks/user";
 import { handleAuthError } from "../../utils/errorHandler";
 import classes from "./register-page.module.css";
 import { MoonLoader } from "react-spinners";
+import { Link } from "react-router-dom";
 
 interface IRegisterFormState {
   enteredEmail: string;
@@ -221,6 +222,10 @@ const RegisterPage: React.FC = () => {
             <div className={classes.actionBox}>
               <button type="submit">Register</button>
             </div>
+            <section className={classes.linkSection}>
+              <p>Already have an account ?</p>
+              <Link to="/login">Login Here</Link>
+            </section>
           </>
         )}
       </form>

@@ -59,3 +59,8 @@
   padding: 0.5rem;
   cursor: pointer;
 }
+
+.linkSection {
+  font-size: 1.5rem;
+  text-align: center;
+}
