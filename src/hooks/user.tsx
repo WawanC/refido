@@ -87,7 +87,10 @@ export const useLoginUser = () => {
       }
 
       await signInWithEmailAndPassword(auth, userEmail, userData.password);
+
+      setIsLoading(false);
     } catch (error: any) {
+      setIsLoading(false);
       throw error;
     }
   };

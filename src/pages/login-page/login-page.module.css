@@ -15,6 +15,12 @@
   gap: 1rem;
 }
 
+.formLoading {
+  align-items: center;
+  min-width: fit-content;
+  padding: 4rem;
+}
+
 .formTitle {
   font-size: 4rem;
   text-align: center;
