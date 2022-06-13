@@ -1,5 +1,5 @@
 import React, { useReducer, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { MoonLoader } from "react-spinners";
 import { useLoginUser } from "../../hooks/user";
 import { handleAuthError } from "../../utils/errorHandler";
@@ -53,6 +53,7 @@ const LoginPage: React.FC = () => {
   const [error, setError] = useState<{ message: string; field: string } | null>(
     null
   );
+  const navigate = useNavigate();
 
   const submitFormHandler: React.FormEventHandler<HTMLFormElement> = async (
     event
@@ -76,6 +77,8 @@ const LoginPage: React.FC = () => {
     }
 
     alert("Login Success");
+
+    navigate("/dashboard");
 
     formDispatch({ type: LoginFormAction.CLEAR_ALL });
   };

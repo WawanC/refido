@@ -3,8 +3,14 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import { equalTo, get, orderByChild, query, ref, set } from "firebase/database";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useAuth } from "../contexts/auth";
 import { auth, database } from "../utils/firebase";
+
+interface User {
+  email: string;
+  username: string;
+}
 
 export const useRegisterUser = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -96,4 +102,33 @@ export const useLoginUser = () => {
   };
 
   return [loginUser, isLoading] as const;
+};
+
+export const useUser = () => {
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [user, setUser] = useState<User | null>(null);
+  const auth = useAuth();
+
+  useEffect(() => {
+    const getUserData = async () => {
+      if (!auth || !auth.currentUser) return;
+
+      setIsLoading(true);
+
+      const usersRef = ref(database, `users/${auth.currentUser.uid}`);
+
+      try {
+        const user = await get(usersRef);
+
+        setUser(user.val());
+      } catch (error) {
+        console.log(error);
+      }
+
+      setIsLoading(false);
+    };
+    getUserData();
+  }, [auth]);
+
+  return [user, isLoading] as const;
 };
