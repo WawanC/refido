@@ -1,6 +1,7 @@
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  signOut,
 } from "firebase/auth";
 import { equalTo, get, orderByChild, query, ref, set } from "firebase/database";
 import { useEffect, useState } from "react";
@@ -131,4 +132,20 @@ export const useUser = () => {
   }, [auth]);
 
   return [user, isLoading] as const;
+};
+
+export const useLogoutUser = () => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const logout = async () => {
+    try {
+      setIsLoading(true);
+      await signOut(auth);
+    } catch (error) {
+      throw error;
+    }
+    setIsLoading(false);
+  };
+
+  return [logout, isLoading] as const;
 };

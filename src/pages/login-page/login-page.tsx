@@ -1,4 +1,4 @@
-import React, {  useReducer, useState } from "react";
+import React, { useReducer, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { MoonLoader } from "react-spinners";
 import { useLoginUser } from "../../hooks/user";
@@ -54,15 +54,12 @@ const LoginPage: React.FC = () => {
     null
   );
   const navigate = useNavigate();
-  
 
   const submitFormHandler: React.FormEventHandler<HTMLFormElement> = async (
     event
   ) => {
     event.preventDefault();
     setError(null);
-
-    console.log(formState);
 
     try {
       await loginUser({
@@ -131,12 +128,12 @@ const LoginPage: React.FC = () => {
             <div className={classes.actionBox}>
               <button type="submit">Login</button>
             </div>
+            <section className={classes.linkSection}>
+              <p>Don't have an account yet ?</p>
+              <Link to="/register">Register Here</Link>
+            </section>
           </>
         )}
-        <section className={classes.linkSection}>
-          <p>Don't have an account yet ?</p>
-          <Link to="/register">Register Here</Link>
-        </section>
       </form>
     </main>
   );
