@@ -1,10 +1,13 @@
+import { useState } from "react";
 import { MoonLoader } from "react-spinners";
+import NewTodoModal from "../../components/NewTodoModal/NewTodoModal";
 import { useLogoutUser, useUser } from "../../hooks/user";
 import classes from "./dashboard-page.module.css";
 
 const DashboardPage: React.FC = () => {
   const [user, userLoading] = useUser();
   const [logout, logoutLoading] = useLogoutUser();
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
 
   const logoutBtnHandler = async () => {
     try {
@@ -14,8 +17,13 @@ const DashboardPage: React.FC = () => {
     }
   };
 
+  const toggleNewTodoModal = (value: boolean) => {
+    setModalOpen(value);
+  };
+
   return (
     <main className={classes.main}>
+      {modalOpen && <NewTodoModal onClose={() => toggleNewTodoModal(false)} />}
       <section className={classes.box}>
         {userLoading || logoutLoading ? (
           <MoonLoader color="black" size={60} />
@@ -25,6 +33,7 @@ const DashboardPage: React.FC = () => {
               Hello, {user?.username || "User"} !
             </h1>
             <div className={classes.actionsBox}>
+              <button onClick={() => toggleNewTodoModal(true)}>New Todo</button>
               <button onClick={logoutBtnHandler}>Logout</button>
             </div>
           </>

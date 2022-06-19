@@ -67,6 +67,7 @@ const LoginPage: React.FC = () => {
         password: formState.enteredPassword.trim(),
       });
     } catch (error: any) {
+      console.log(error);
       const err = handleAuthError(error.code || error.message);
       if (!err) return;
       setError({ message: err.message, field: err.field });
