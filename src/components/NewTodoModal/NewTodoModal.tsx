@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { MoonLoader } from "react-spinners";
 import { useCreateTodo } from "../../hooks/todo";
 import classes from "./NewTodoModal.module.css";
 
@@ -21,7 +22,11 @@ const NewTodoModal: React.FC<INewTodoModal> = (props) => {
   ) => {
     event.preventDefault();
 
-    await createTodo({ title: enteredTitle.trim() });
+    try {
+      await createTodo({ title: enteredTitle.trim() });
+    } catch (error) {
+      console.log(error);
+    }
 
     setEnteredTitle("");
     props.onClose();
@@ -31,21 +36,27 @@ const NewTodoModal: React.FC<INewTodoModal> = (props) => {
     <main className={classes.main}>
       <div className={classes.backdrop} onClick={props.onClose} />
       <form className={classes.box} onSubmit={submitFormHandler}>
-        <h1 className={classes.title}>Create New Todo</h1>
-        <div className={classes.inputBox}>
-          <label htmlFor="title">Title</label>
-          <input
-            type="text"
-            id="title"
-            placeholder="Todo Title"
-            value={enteredTitle}
-            onChange={changeEnteredTitleHandler}
-            required
-          />
-        </div>
-        <div className={classes.actionsBox}>
-          <button type="submit">Add Todo</button>
-        </div>
+        {createTodoLoading ? (
+          <MoonLoader color="black" size={60} />
+        ) : (
+          <>
+            <h1 className={classes.title}>Create New Todo</h1>
+            <div className={classes.inputBox}>
+              <label htmlFor="title">Title</label>
+              <input
+                type="text"
+                id="title"
+                placeholder="Todo Title"
+                value={enteredTitle}
+                onChange={changeEnteredTitleHandler}
+                required
+              />
+            </div>
+            <div className={classes.actionsBox}>
+              <button type="submit">Add Todo</button>
+            </div>
+          </>
+        )}
       </form>
     </main>
   );
