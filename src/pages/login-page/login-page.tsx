@@ -75,8 +75,6 @@ const LoginPage: React.FC = () => {
       return;
     }
 
-    alert("Login Success");
-
     navigate("/dashboard");
 
     formDispatch({ type: LoginFormAction.CLEAR_ALL });

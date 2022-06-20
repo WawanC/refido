@@ -10,7 +10,7 @@ const DashboardPage: React.FC = () => {
   const [user, userLoading] = useUser();
   const [logout, logoutLoading] = useLogoutUser();
   const [modalOpen, setModalOpen] = useState<boolean>(false);
-  const [todos, todosLoading, todosError] = useGetTodos();
+  const [todos] = useGetTodos();
 
   const logoutBtnHandler = async () => {
     try {
@@ -24,11 +24,13 @@ const DashboardPage: React.FC = () => {
     setModalOpen(value);
   };
 
+  const isLoading = userLoading || logoutLoading;
+
   return (
     <main className={classes.main}>
       {modalOpen && <NewTodoModal onClose={() => toggleNewTodoModal(false)} />}
-      <section className={classes.box}>
-        {userLoading || logoutLoading ? (
+      <section className={`${classes.box} ${isLoading && classes.box_loading}`}>
+        {isLoading ? (
           <MoonLoader color="black" size={60} />
         ) : (
           <>

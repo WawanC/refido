@@ -3,7 +3,7 @@ import { useRegisterUser } from "../../hooks/user";
 import { handleAuthError } from "../../utils/errorHandler";
 import classes from "./register-page.module.css";
 import { MoonLoader } from "react-spinners";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 interface IRegisterFormState {
   enteredEmail: string;
@@ -105,8 +105,6 @@ const RegisterPage: React.FC = () => {
       return;
     }
 
-    console.log(formState);
-
     try {
       await registerUser({
         email: formState.enteredEmail.trim(),
@@ -122,7 +120,7 @@ const RegisterPage: React.FC = () => {
       return formDispatch({ type: RegisterFormAction.CLEAR_PASSWORDS });
     }
 
-    alert("Register User Success");
+    alert("Register Success");
 
     formDispatch({ type: RegisterFormAction.CLEAR_ALL });
   };

@@ -9,14 +9,18 @@ interface ITodoList {
 const TodoList: React.FC<ITodoList> = (props) => {
   return (
     <main className={classes.box}>
-      {props.todos.map((todo) => (
-        <TodoItem
-          key={todo.id}
-          id={todo.id}
-          title={todo.title}
-          isCompleted={todo.isCompleted}
-        />
-      ))}
+      {props.todos.length > 0 ? (
+        props.todos.map((todo) => (
+          <TodoItem
+            key={todo.id}
+            id={todo.id}
+            title={todo.title}
+            isCompleted={todo.isCompleted}
+          />
+        ))
+      ) : (
+        <p>No todos yet...</p>
+      )}
     </main>
   );
 };

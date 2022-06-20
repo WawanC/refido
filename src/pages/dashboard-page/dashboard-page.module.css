@@ -16,6 +16,10 @@
   gap: 2rem;
 }
 
+.box_loading {
+  min-width: fit-content;
+}
+
 .title {
   font-size: 4rem;
   text-align: center;
