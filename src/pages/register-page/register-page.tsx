@@ -3,7 +3,7 @@ import { useRegisterUser } from "../../hooks/user";
 import { handleAuthError } from "../../utils/errorHandler";
 import classes from "./register-page.module.css";
 import { MoonLoader } from "react-spinners";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 interface IRegisterFormState {
   enteredEmail: string;
