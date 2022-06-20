@@ -73,16 +73,6 @@ const RegisterPage: React.FC = () => {
     if (formState.enteredUsername.length < 6) {
       setError({
         message: "Username minimal 6 characters long",
-        field: "password",
-      });
-      formDispatch({ type: RegisterFormAction.CHANGE_USERNAME });
-      formDispatch({ type: RegisterFormAction.CLEAR_PASSWORDS });
-      return;
-    }
-
-    if (formState.enteredUsername.length < 6) {
-      setError({
-        message: "Username minimal 6 characters long",
         field: "username",
       });
       formDispatch({ type: RegisterFormAction.CHANGE_USERNAME });
