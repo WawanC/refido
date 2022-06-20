@@ -3,6 +3,7 @@
 
   display: flex;
   justify-content: space-between;
+  gap: 1rem;
   padding: 1rem;
   cursor: pointer;
 }
@@ -13,14 +14,19 @@
 
 .title {
   font-size: 2rem;
+  word-break: break-word;
+  text-align: left;
 }
 
 .actionsBox {
   display: flex;
+  align-items: center;
 }
 
 .actionsBox button {
   font-size: 1.5rem;
   padding: 0.5rem;
   cursor: pointer;
+
+  height: fit-content;
 }

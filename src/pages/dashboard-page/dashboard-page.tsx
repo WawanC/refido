@@ -21,33 +21,44 @@ const DashboardPage: React.FC = () => {
   };
 
   const toggleNewTodoModal = (value: boolean) => {
+    if (value) {
+      document.body.style.overflowY = "hidden";
+    } else {
+      document.body.style.overflowY = "auto";
+    }
     setModalOpen(value);
   };
 
   const isLoading = userLoading || logoutLoading;
 
   return (
-    <main className={classes.main}>
+    <>
       {modalOpen && <NewTodoModal onClose={() => toggleNewTodoModal(false)} />}
-      <section className={`${classes.box} ${isLoading && classes.box_loading}`}>
-        {isLoading ? (
-          <MoonLoader color="black" size={60} />
-        ) : (
-          <>
-            <h1 className={classes.title}>
-              Hello, {user?.username || "User"} !
-            </h1>
-            <div className={classes.actionsBox}>
-              <button onClick={() => toggleNewTodoModal(true)}>New Todo</button>
-              <button onClick={logoutBtnHandler}>Logout</button>
-            </div>
-            <section>
-              <TodoList todos={todos} />
-            </section>
-          </>
-        )}
-      </section>
-    </main>
+      <main className={classes.main}>
+        <section
+          className={`${classes.box} ${isLoading && classes.box_loading}`}
+        >
+          {isLoading ? (
+            <MoonLoader color="black" size={60} />
+          ) : (
+            <>
+              <h1 className={classes.title}>
+                Hello, {user?.username || "User"} !
+              </h1>
+              <div className={classes.actionsBox}>
+                <button onClick={() => toggleNewTodoModal(true)}>
+                  New Todo
+                </button>
+                <button onClick={logoutBtnHandler}>Logout</button>
+              </div>
+              <section>
+                <TodoList todos={todos} />
+              </section>
+            </>
+          )}
+        </section>
+      </main>
+    </>
   );
 };
 

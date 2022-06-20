@@ -10,10 +10,12 @@ interface INewTodoModal {
 const NewTodoModal: React.FC<INewTodoModal> = (props) => {
   const [createTodo, createTodoLoading] = useCreateTodo();
   const [enteredTitle, setEnteredTitle] = useState<string>("");
+  const titleMaxLength = 50;
 
   const changeEnteredTitleHandler: React.ChangeEventHandler<
     HTMLInputElement
   > = (event) => {
+    if (event.target.value.length > titleMaxLength) return;
     setEnteredTitle(event.target.value);
   };
 
@@ -42,7 +44,12 @@ const NewTodoModal: React.FC<INewTodoModal> = (props) => {
           <>
             <h1 className={classes.title}>Create New Todo</h1>
             <div className={classes.inputBox}>
-              <label htmlFor="title">Title</label>
+              <div className={classes.inputInfo}>
+                <label htmlFor="title">Title :</label>
+                <span>
+                  {enteredTitle.length}/{titleMaxLength}
+                </span>
+              </div>
               <input
                 type="text"
                 id="title"
