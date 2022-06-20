@@ -20,8 +20,7 @@ const TodoItem: React.FC<ITodoItem> = (props) => {
 
   return (
     <div className={classes.box} onClick={toggleTodoHandler}>
-      <h1>{props.title}</h1>
-      <span>({props.isCompleted ? "true" : "false"})</span>
+      <h1 className={props.isCompleted ? classes.done : ""}>{props.title}</h1>
     </div>
   );
 };

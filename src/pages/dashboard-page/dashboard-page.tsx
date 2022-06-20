@@ -39,7 +39,9 @@ const DashboardPage: React.FC = () => {
               <button onClick={() => toggleNewTodoModal(true)}>New Todo</button>
               <button onClick={logoutBtnHandler}>Logout</button>
             </div>
-            <section>{todos && <TodoList todos={todos} />}</section>
+            <section>
+              <TodoList todos={todos} />
+            </section>
           </>
         )}
       </section>

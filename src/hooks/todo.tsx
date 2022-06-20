@@ -1,4 +1,4 @@
-import { get, push, ref, update } from "firebase/database";
+import { get, onValue, push, ref, update } from "firebase/database";
 import { useEffect, useState } from "react";
 import { useAuth } from "../contexts/auth";
 import { database } from "../utils/firebase";
@@ -36,21 +36,22 @@ export const useCreateTodo = () => {
 };
 
 export const useGetTodos = () => {
-  const [todos, setTodos] = useState<ITodo[] | null>(null);
+  const [todos, setTodos] = useState<ITodo[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<any>(null);
   const { currentUser } = useAuth();
 
   useEffect(() => {
-    const fetchTodos = async () => {
-      if (!currentUser) return;
-      setIsLoading(true);
-      setError(null);
+    if (!currentUser) return;
 
-      const userTodosRef = ref(database, `todos/${currentUser.uid}`);
+    const userTodosRef = ref(database, `todos/${currentUser.uid}`);
 
-      try {
-        const snapshot = await get(userTodosRef);
+    const unsubscribe = onValue(
+      userTodosRef,
+      (snapshot) => {
+        setIsLoading(true);
+        setError(null);
+
         const todos: ITodo[] = [];
 
         if (snapshot.exists()) {
@@ -66,15 +67,13 @@ export const useGetTodos = () => {
 
           setTodos(todos);
         }
-      } catch (error) {
-        console.log(error);
-        setIsLoading(false);
-        setError(error);
-      }
 
-      setIsLoading(false);
-    };
-    fetchTodos();
+        setIsLoading(false);
+      },
+      (error) => setError(error)
+    );
+
+    return unsubscribe;
   }, [currentUser]);
 
   return [todos, isLoading, error] as const;
