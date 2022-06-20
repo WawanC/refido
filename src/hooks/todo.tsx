@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../contexts/auth";
 import { database } from "../utils/firebase";
 
-interface ITodo {
+export interface ITodo {
   id: string;
   title: string;
   isCompleted: boolean;

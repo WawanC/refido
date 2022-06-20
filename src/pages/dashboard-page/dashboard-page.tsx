@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { MoonLoader } from "react-spinners";
 import NewTodoModal from "../../components/NewTodoModal/NewTodoModal";
+import TodoList from "../../components/TodoList/TodoList";
 import { useGetTodos } from "../../hooks/todo";
 import { useLogoutUser, useUser } from "../../hooks/user";
 import classes from "./dashboard-page.module.css";
@@ -9,7 +10,7 @@ const DashboardPage: React.FC = () => {
   const [user, userLoading] = useUser();
   const [logout, logoutLoading] = useLogoutUser();
   const [modalOpen, setModalOpen] = useState<boolean>(false);
-  // const [todos, todosLoading, todosError] = useGetTodos();
+  const [todos, todosLoading, todosError] = useGetTodos();
 
   const logoutBtnHandler = async () => {
     try {
@@ -38,6 +39,7 @@ const DashboardPage: React.FC = () => {
               <button onClick={() => toggleNewTodoModal(true)}>New Todo</button>
               <button onClick={logoutBtnHandler}>Logout</button>
             </div>
+            <section>{todos && <TodoList todos={todos} />}</section>
           </>
         )}
       </section>
