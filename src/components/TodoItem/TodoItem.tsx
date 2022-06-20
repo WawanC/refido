@@ -1,4 +1,4 @@
-import { useToggleTodo } from "../../hooks/todo";
+import { useDeleteTodo, useToggleTodo } from "../../hooks/todo";
 import classes from "./TodoItem.module.css";
 
 interface ITodoItem {
@@ -9,6 +9,7 @@ interface ITodoItem {
 
 const TodoItem: React.FC<ITodoItem> = (props) => {
   const [toggleTodo] = useToggleTodo();
+  const [deleteTodo] = useDeleteTodo();
 
   const toggleTodoHandler = async () => {
     try {
@@ -18,9 +19,28 @@ const TodoItem: React.FC<ITodoItem> = (props) => {
     }
   };
 
+  const deleteTodoHandler: React.MouseEventHandler<HTMLButtonElement> = async (
+    event
+  ) => {
+    event.stopPropagation();
+
+    try {
+      await deleteTodo(props.id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className={classes.box} onClick={toggleTodoHandler}>
-      <h1 className={props.isCompleted ? classes.done : ""}>{props.title}</h1>
+      <h1
+        className={`${classes.title} ${props.isCompleted ? classes.done : ""}`}
+      >
+        {props.title}
+      </h1>
+      <div className={classes.actionsBox}>
+        <button onClick={deleteTodoHandler}>Delete</button>
+      </div>
     </div>
   );
 };

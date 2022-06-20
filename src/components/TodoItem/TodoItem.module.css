@@ -2,10 +2,25 @@
   border: 1px solid black;
 
   display: flex;
+  justify-content: space-between;
   padding: 1rem;
   cursor: pointer;
 }
 
 .done {
   text-decoration: line-through;
+}
+
+.title {
+  font-size: 2rem;
+}
+
+.actionsBox {
+  display: flex;
+}
+
+.actionsBox button {
+  font-size: 1.5rem;
+  padding: 0.5rem;
+  cursor: pointer;
 }
