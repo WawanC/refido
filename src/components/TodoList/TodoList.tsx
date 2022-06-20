@@ -12,6 +12,7 @@ const TodoList: React.FC<ITodoList> = (props) => {
       {props.todos.map((todo) => (
         <TodoItem
           key={todo.id}
+          id={todo.id}
           title={todo.title}
           isCompleted={todo.isCompleted}
         />

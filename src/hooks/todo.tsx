@@ -1,4 +1,4 @@
-import { get, push, ref } from "firebase/database";
+import { get, push, ref, update } from "firebase/database";
 import { useEffect, useState } from "react";
 import { useAuth } from "../contexts/auth";
 import { database } from "../utils/firebase";
@@ -78,4 +78,26 @@ export const useGetTodos = () => {
   }, [currentUser]);
 
   return [todos, isLoading, error] as const;
+};
+
+export const useToggleTodo = () => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { currentUser } = useAuth();
+
+  const toggleTodo = async (todoId: string, isCompleted: boolean) => {
+    if (!currentUser) return;
+    setIsLoading(true);
+
+    const todoRef = ref(database, `/todos/${currentUser.uid}/${todoId}`);
+
+    try {
+      await update(todoRef, { isCompleted });
+    } catch (error) {
+      throw error;
+    }
+
+    setIsLoading(false);
+  };
+
+  return [toggleTodo, isLoading] as const;
 };
