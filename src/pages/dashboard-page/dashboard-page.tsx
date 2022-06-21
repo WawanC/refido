@@ -21,11 +21,6 @@ const DashboardPage: React.FC = () => {
   };
 
   const toggleNewTodoModal = (value: boolean) => {
-    if (value) {
-      document.body.style.overflowY = "hidden";
-    } else {
-      document.body.style.overflowY = "auto";
-    }
     setModalOpen(value);
   };
 
