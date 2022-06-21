@@ -76,6 +76,11 @@
     gap: 2rem;
   }
 
+  .formLoading {
+    height: 100%;
+    justify-content: center;
+  }
+
   .formTitle {
     font-size: 2.5rem;
   }

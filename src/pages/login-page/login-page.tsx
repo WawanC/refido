@@ -83,7 +83,9 @@ const LoginPage: React.FC = () => {
   return (
     <main className={classes.main}>
       <form
-        className={`${classes.form} ${loginUserLoading && classes.formLoading}`}
+        className={`${classes.form} ${
+          loginUserLoading ? classes.formLoading : ""
+        }`}
         onSubmit={submitFormHandler}
       >
         {loginUserLoading ? (

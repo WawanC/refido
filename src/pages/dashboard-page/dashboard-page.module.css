@@ -19,7 +19,7 @@
 }
 
 .box_loading {
-  width: fit-content;
+  min-width: fit-content;
 }
 
 .title {
@@ -48,6 +48,13 @@
     width: 100%;
     padding: 2rem 0;
     border: none;
+  }
+
+  .box_loading {
+    height: 100%;
+
+    justify-content: center;
+    align-items: center;
   }
 
   .title {

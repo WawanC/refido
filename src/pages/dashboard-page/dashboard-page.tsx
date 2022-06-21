@@ -31,7 +31,8 @@ const DashboardPage: React.FC = () => {
       {modalOpen && <NewTodoModal onClose={() => toggleNewTodoModal(false)} />}
       <main className={classes.main}>
         <section
-          className={`${classes.box} ${isLoading && classes.box_loading}`}
+          className={`${classes.box} 
+          ${isLoading ? classes.box_loading : ""}`}
         >
           {isLoading ? (
             <MoonLoader color="black" size={60} />

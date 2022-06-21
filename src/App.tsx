@@ -4,6 +4,7 @@ import PrivateRoute from "./guards/private-route";
 import PublicRoute from "./guards/public-route";
 import DashboardPage from "./pages/dashboard-page/dashboard-page";
 import HomePage from "./pages/home-page/home-page";
+import LoadingPage from "./pages/loading-page/loading-page";
 import LoginPage from "./pages/login-page/login-page";
 import RegisterPage from "./pages/register-page/register-page";
 
@@ -11,7 +12,7 @@ const App: React.FC = () => {
   const auth = useAuth();
 
   return auth.isLoading ? (
-    <p>Loading App...</p>
+    <LoadingPage />
   ) : (
     <BrowserRouter>
       <Routes>

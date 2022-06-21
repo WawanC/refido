@@ -71,6 +71,11 @@
     gap: 2rem;
   }
 
+  .formLoading {
+    height: 100%;
+    justify-content: center;
+  }
+
   .inputBox {
     flex-direction: column;
     font-size: 1.5rem;
