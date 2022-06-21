@@ -6,3 +6,9 @@
   gap: 1rem;
   text-align: center;
 }
+
+@media (max-width: 576px) {
+  .box {
+    border: none;
+  }
+}

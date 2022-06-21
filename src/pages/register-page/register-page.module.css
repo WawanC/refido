@@ -64,3 +64,25 @@
   font-size: 1.5rem;
   text-align: center;
 }
+
+@media (max-width: 576px) {
+  .main {
+    align-items: flex-start;
+  }
+
+  .form {
+    width: 100%;
+    border: none;
+    gap: 2rem;
+  }
+
+  .formTitle {
+    font-size: 2.5rem;
+  }
+
+  .inputBox {
+    flex-direction: column;
+    font-size: 1.5rem;
+    gap: 0.5rem;
+  }
+}

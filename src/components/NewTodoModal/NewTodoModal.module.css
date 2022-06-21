@@ -62,3 +62,22 @@
   font-size: 1.5rem;
   padding: 0.5rem;
 }
+
+@media (max-width: 576px) {
+  .main {
+    align-items: flex-end;
+  }
+
+  .box {
+    width: 100%;
+  }
+
+  .title {
+    font-size: 2rem;
+    text-align: center;
+  }
+
+  .inputInfo {
+    font-size: 1.25rem;
+  }
+}

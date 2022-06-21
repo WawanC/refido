@@ -30,3 +30,26 @@
 .linkBox a {
   font-size: 2rem;
 }
+
+@media (max-width: 576px) {
+  .main {
+    align-items: start;
+  }
+
+  .mainBox {
+    border: none;
+  }
+
+  .title {
+    font-size: 3.5rem;
+  }
+
+  .linkBox {
+    flex-direction: column;
+    align-self: center;
+  }
+
+  .linkBox a {
+    text-align: center;
+  }
+}
