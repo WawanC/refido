@@ -1,4 +1,5 @@
 import { useDeleteTodo, useToggleTodo } from "../../hooks/todo";
+import DraggableIcon from "../icons/DraggableIcon";
 import classes from "./TodoItem.module.css";
 
 interface ITodoItem {
@@ -32,12 +33,18 @@ const TodoItem: React.FC<ITodoItem> = (props) => {
   };
 
   return (
-    <div className={classes.box} onClick={toggleTodoHandler}>
-      <h1
-        className={`${classes.title} ${props.isCompleted ? classes.done : ""}`}
-      >
-        {props.title}
-      </h1>
+    <div className={classes.box}>
+      <div className={classes.infoBox}>
+        <DraggableIcon size={36} class={classes.draggableIcon} />
+        <h1
+          className={`${classes.title} ${
+            props.isCompleted ? classes.done : ""
+          }`}
+          onClick={toggleTodoHandler}
+        >
+          {props.title}
+        </h1>
+      </div>
       <div className={classes.actionsBox}>
         <button onClick={deleteTodoHandler}>Delete</button>
       </div>
