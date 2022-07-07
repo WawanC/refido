@@ -168,7 +168,10 @@ export const useOrderTodo = () => {
 
       await runTransaction(userTodosRef, (todos) => {
         for (const key in todos) {
-          if (todos[key].order >= targetOrder) {
+          if (
+            todos[key].order >= targetOrder &&
+            todos[key].order < todos[todoKey].order
+          ) {
             todos[key].order++;
           }
         }

@@ -29,7 +29,7 @@ const TodoList: React.FC<ITodoList> = (props) => {
     setTodos([...props.todos]);
   }, [props.todos]);
 
-  const dragEndHandler = (result: DropResult) => {
+  const dragEndHandler = async (result: DropResult) => {
     if (!result.destination) return;
 
     const orderedTodos = reorder(
@@ -39,7 +39,7 @@ const TodoList: React.FC<ITodoList> = (props) => {
     );
 
     try {
-      reorderTodos(result.source.index + 1, result.destination.index + 1);
+      await reorderTodos(result.source.index + 1, result.destination.index + 1);
     } catch (error) {
       console.log(error);
     }
