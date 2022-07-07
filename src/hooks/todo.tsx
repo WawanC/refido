@@ -1,4 +1,15 @@
-import { get, onValue, push, ref, remove, update } from "firebase/database";
+import {
+  equalTo,
+  get,
+  onValue,
+  orderByChild,
+  push,
+  query,
+  ref,
+  remove,
+  runTransaction,
+  update,
+} from "firebase/database";
 import { useEffect, useState } from "react";
 import { useAuth } from "../contexts/auth";
 import { database } from "../utils/firebase";
@@ -7,6 +18,7 @@ export interface ITodo {
   id: string;
   title: string;
   isCompleted: boolean;
+  order: number;
 }
 
 export const useCreateTodo = () => {
@@ -71,10 +83,13 @@ export const useGetTodos = () => {
               id: key,
               title: todosData[key].title,
               isCompleted: todosData[key].isCompleted,
+              order: todosData[key].order,
             });
           }
 
-          setTodos(todos);
+          const sortedTodo = todos.sort((a, b) => a.order - b.order);
+
+          setTodos(sortedTodo);
         } else {
           setTodos([]);
         }
@@ -133,4 +148,38 @@ export const useDeleteTodo = () => {
   };
 
   return [deleteTodo, isLoading] as const;
+};
+
+export const useOrderTodo = () => {
+  const { currentUser } = useAuth();
+
+  const reorderTodo = async (startOrder: number, targetOrder: number) => {
+    if (!currentUser) return;
+
+    const userTodosRef = ref(database, `todos/${currentUser.uid}`);
+
+    try {
+      const todo = await get(
+        query(userTodosRef, orderByChild("order"), equalTo(startOrder))
+      );
+      if (!todo.exists) return;
+
+      const todoKey = Object.keys(todo.val())[0];
+
+      await runTransaction(userTodosRef, (todos) => {
+        for (const key in todos) {
+          if (todos[key].order >= targetOrder) {
+            todos[key].order++;
+          }
+        }
+        todos[todoKey].order = targetOrder;
+
+        return todos;
+      });
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  return [reorderTodo] as const;
 };

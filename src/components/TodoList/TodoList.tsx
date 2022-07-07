@@ -1,6 +1,6 @@
 import classes from "./TodoList.module.css";
 import TodoItem from "../TodoItem/TodoItem";
-import { ITodo } from "../../hooks/todo";
+import { ITodo, useOrderTodo } from "../../hooks/todo";
 import {
   DragDropContext,
   Draggable,
@@ -23,6 +23,7 @@ const reorder = (list: any[], startIndex: number, endIndex: number) => {
 
 const TodoList: React.FC<ITodoList> = (props) => {
   const [todos, setTodos] = useState<ITodo[]>([]);
+  const [reorderTodos] = useOrderTodo();
 
   useEffect(() => {
     setTodos([...props.todos]);
@@ -36,6 +37,12 @@ const TodoList: React.FC<ITodoList> = (props) => {
       result.source.index,
       result.destination.index
     );
+
+    try {
+      reorderTodos(result.source.index + 1, result.destination.index + 1);
+    } catch (error) {
+      console.log(error);
+    }
 
     setTodos(orderedTodos);
   };
