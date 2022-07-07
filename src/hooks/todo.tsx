@@ -1,4 +1,4 @@
-import { onValue, push, ref, remove, update } from "firebase/database";
+import { get, onValue, push, ref, remove, update } from "firebase/database";
 import { useEffect, useState } from "react";
 import { useAuth } from "../contexts/auth";
 import { database } from "../utils/firebase";
@@ -20,9 +20,18 @@ export const useCreateTodo = () => {
     const userTodosRef = ref(database, `todos/${currentUser.uid}`);
 
     try {
+      let todoOrder = 1;
+
+      const todos = await get(userTodosRef);
+
+      if (todos.exists()) {
+        todoOrder = Object.keys(todos.val()).length + 1;
+      }
+
       await push(userTodosRef, {
         title: todoData.title,
         isCompleted: false,
+        order: todoOrder,
       });
     } catch (error) {
       setIsLoading(false);

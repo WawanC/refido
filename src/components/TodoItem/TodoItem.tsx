@@ -1,14 +1,21 @@
+import {
+  DraggableProvidedDraggableProps,
+  DraggableProvidedDragHandleProps,
+} from "react-beautiful-dnd";
 import { useDeleteTodo, useToggleTodo } from "../../hooks/todo";
 import DraggableIcon from "../icons/DraggableIcon";
 import classes from "./TodoItem.module.css";
+import React from "react";
 
 interface ITodoItem {
   id: string;
   title: string;
   isCompleted: boolean;
+  draggableProps?: DraggableProvidedDraggableProps;
+  dragHandleProps?: DraggableProvidedDragHandleProps;
 }
 
-const TodoItem: React.FC<ITodoItem> = (props) => {
+const TodoItem = React.forwardRef<HTMLDivElement, ITodoItem>((props, ref) => {
   const [toggleTodo] = useToggleTodo();
   const [deleteTodo] = useDeleteTodo();
 
@@ -33,9 +40,11 @@ const TodoItem: React.FC<ITodoItem> = (props) => {
   };
 
   return (
-    <div className={classes.box}>
+    <div className={classes.box} ref={ref} {...props.draggableProps}>
       <div className={classes.infoBox}>
-        <DraggableIcon size={36} class={classes.draggableIcon} />
+        <div {...props.dragHandleProps}>
+          <DraggableIcon size={36} class={classes.draggableIcon} />
+        </div>
         <h1
           className={`${classes.title} ${
             props.isCompleted ? classes.done : ""
@@ -50,6 +59,6 @@ const TodoItem: React.FC<ITodoItem> = (props) => {
       </div>
     </div>
   );
-};
+});
 
 export default TodoItem;
