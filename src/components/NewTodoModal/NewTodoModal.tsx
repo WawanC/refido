@@ -57,6 +57,7 @@ const NewTodoModal: React.FC<INewTodoModal> = (props) => {
                 value={enteredTitle}
                 onChange={changeEnteredTitleHandler}
                 required
+                autoFocus
               />
             </div>
             <div className={classes.actionsBox}>
