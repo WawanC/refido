@@ -1,10 +1,7 @@
 import {
-  equalTo,
   get,
   onValue,
-  orderByChild,
   push,
-  query,
   ref,
   remove,
   runTransaction,
@@ -153,29 +150,18 @@ export const useDeleteTodo = () => {
 export const useOrderTodo = () => {
   const { currentUser } = useAuth();
 
-  const reorderTodo = async (startOrder: number, targetOrder: number) => {
+  const reorderTodo = async (currentTodos: ITodo[]) => {
     if (!currentUser) return;
 
     const userTodosRef = ref(database, `todos/${currentUser.uid}`);
 
     try {
-      const todo = await get(
-        query(userTodosRef, orderByChild("order"), equalTo(startOrder))
-      );
-      if (!todo.exists) return;
-
-      const todoKey = Object.keys(todo.val())[0];
-
       await runTransaction(userTodosRef, (todos) => {
-        for (const key in todos) {
-          if (
-            todos[key].order >= targetOrder &&
-            todos[key].order < todos[todoKey].order
-          ) {
-            todos[key].order++;
-          }
-        }
-        todos[todoKey].order = targetOrder;
+        currentTodos.forEach((currentTodo) => {
+          if (!(currentTodo.id in todos)) return;
+
+          todos[currentTodo.id].order = currentTodo.order;
+        });
 
         return todos;
       });
