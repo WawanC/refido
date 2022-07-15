@@ -2,6 +2,8 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
+  GoogleAuthProvider,
+  signInWithPopup,
 } from "firebase/auth";
 import { equalTo, get, orderByChild, query, ref, set } from "firebase/database";
 import { useEffect, useState } from "react";
@@ -12,6 +14,8 @@ interface User {
   email: string;
   username: string;
 }
+
+const googleProvider = new GoogleAuthProvider();
 
 export const useRegisterUser = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -57,6 +61,27 @@ export const useRegisterUser = () => {
   };
 
   return [registerUser, isLoading] as const;
+};
+
+export const useGoogleAuth = () => {
+  const authenticate = async () => {
+    const userInfo = await signInWithPopup(auth, googleProvider);
+
+    const userRef = ref(database, `users/${userInfo.user.uid}`);
+
+    const user = await get(userRef);
+
+    if (!user.exists()) {
+      const newUserRef = ref(database, `users/${userInfo.user.uid}`);
+
+      await set(newUserRef, {
+        email: userInfo.user.email,
+        username: userInfo.user.displayName,
+      });
+    }
+  };
+
+  return [authenticate] as const;
 };
 
 export const useLoginUser = () => {

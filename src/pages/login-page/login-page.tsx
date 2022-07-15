@@ -1,7 +1,7 @@
 import React, { useReducer, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { MoonLoader } from "react-spinners";
-import { useLoginUser } from "../../hooks/user";
+import { useGoogleAuth, useLoginUser } from "../../hooks/user";
 import { handleAuthError } from "../../utils/errorHandler";
 import classes from "./login-page.module.css";
 
@@ -53,6 +53,7 @@ const LoginPage: React.FC = () => {
   const [error, setError] = useState<{ message: string; field: string } | null>(
     null
   );
+  const [authenticateGoogle] = useGoogleAuth();
   const navigate = useNavigate();
 
   const submitFormHandler: React.FormEventHandler<HTMLFormElement> = async (
@@ -78,6 +79,18 @@ const LoginPage: React.FC = () => {
     navigate("/dashboard");
 
     formDispatch({ type: LoginFormAction.CLEAR_ALL });
+  };
+
+  const authenticateGoogleHandler = async () => {
+    try {
+      await authenticateGoogle();
+
+      navigate("/dashboard");
+      
+      formDispatch({ type: LoginFormAction.CLEAR_ALL });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -128,6 +141,11 @@ const LoginPage: React.FC = () => {
             </div>
             <div className={classes.actionBox}>
               <button type="submit">Login</button>
+            </div>
+            <div className={classes.providerBox}>
+              <button type="button" onClick={authenticateGoogleHandler}>
+                Login With Google
+              </button>
             </div>
             <section className={classes.linkSection}>
               <p>Don't have an account yet ?</p>

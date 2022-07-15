@@ -49,10 +49,17 @@
   justify-content: center;
 }
 
-.actionBox button {
+.actionBox button,
+.providerBox button {
   font-size: 1.5rem;
   padding: 0.5rem;
   cursor: pointer;
+}
+
+.providerBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .linkSection {

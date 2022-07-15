@@ -1,4 +1,5 @@
-import { Navigate } from "react-router-dom";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/auth";
 
 interface IPrivateRoute {
@@ -7,10 +8,13 @@ interface IPrivateRoute {
 
 const PrivateRoute: React.FC<IPrivateRoute> = (props) => {
   const auth = useAuth();
+  const navigate = useNavigate();
 
-  if (!auth.currentUser) {
-    return <Navigate to="/login" />;
-  }
+  useEffect(() => {
+    if (!auth.currentUser) {
+      navigate("/login");
+    }
+  }, []);
 
   return props.element;
 };
