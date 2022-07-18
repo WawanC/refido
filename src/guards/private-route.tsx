@@ -14,6 +14,7 @@ const PrivateRoute: React.FC<IPrivateRoute> = (props) => {
     if (!auth.currentUser) {
       navigate("/login");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return props.element;

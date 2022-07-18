@@ -14,6 +14,7 @@ const PublicRoute: React.FC<IPublicRoute> = (props) => {
     if (auth.currentUser) {
       navigate("/dashboard");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return props.element;
