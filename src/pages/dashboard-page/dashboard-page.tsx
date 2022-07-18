@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { MoonLoader } from "react-spinners";
 import NewTodoModal from "../../components/NewTodoModal/NewTodoModal";
 import TodoList from "../../components/TodoList/TodoList";
@@ -11,10 +12,12 @@ const DashboardPage: React.FC = () => {
   const [logout, logoutLoading] = useLogoutUser();
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [todos] = useGetTodos();
+  const navigate = useNavigate();
 
   const logoutBtnHandler = async () => {
     try {
       await logout();
+      navigate("/");
     } catch (error) {
       console.log(error);
     }
